@@ -1,40 +1,47 @@
+import React, {Component} from 'react';
+import {Button, FormControl, FormGroup} from "react-bootstrap";
 
-import React, {Component, ReactText} from 'react';
-import { Button, FormGroup, FormControl} from "react-bootstrap";
 type Props = {};
 type State = {};
 
 export default class Login extends Component<Props, State> {
 
-  
-	handleSubmit = () => {
 
-	};
+    handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
 
-	render() {
-		return (
-			<div className="Login">
-			<form onSubmit={this.handleSubmit}>
-			  <FormGroup controlId="email">
-				<label>Email</label>
-				<FormControl
-				  autoFocus
-				  type="email"
-				  value={""}
-				/>
-			  </FormGroup>
-			  <FormGroup controlId="password">
-				<label>Password</label>
-				<FormControl
-				  value={""}
-				  type="password"
-				/>
-			  </FormGroup>
-			  <Button block type="submit">
-				Login
-			  </Button>
-			</form>
-		  </div>
-		  );
-	};
+        fetch('http://localhost:5000/jira', {
+            method: 'POST',
+            body: data,
+        }).then(r => r.json()
+        ).then(r => console.log(r));
+    };
+
+    render() {
+        return (
+            <div className="Login">
+                <form onSubmit={this.handleSubmit}>
+                    <FormGroup controlId="email">
+                        <label>Username</label>
+                        <FormControl
+                            id="username" name="username"
+                            autoFocus
+                            type="text"
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="password">
+                        <label>Password</label>
+                        <FormControl
+                            id="password" name="password"
+                            type="password"
+                        />
+                    </FormGroup>
+                    <Button block type="submit">
+                        Login
+                    </Button>
+                </form>
+            </div>
+        );
+    };
 }

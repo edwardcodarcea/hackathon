@@ -1,24 +1,18 @@
-import os
-
 import requests
-from dotenv import load_dotenv
-from pathlib import Path
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 app = Flask("Peon API")
+CORS(app)
 
 jira_base = 'https://jira.tarent.de/rest/api/2/'
 jira_all_issues_for_current_user = jira_base + "search?jql=assignee%20=%20currentuser()&fields=project,summary,status&maxResults=1000"
 
-env_path = Path('.') / '.env'
-load_dotenv(dotenv_path=env_path)
 
-user_name = os.environ.get('JIRA_USER')
-password = os.environ.get('JIRA_PASS')
-
-
-@app.route("/jira", methods=["GET"])
-def movies_get():
+@app.route("/jira", methods=["POST"])
+def get_jira_data():
+    user_name = request.form.get('username')
+    password = request.form.get('password')
     r = requests.get(jira_all_issues_for_current_user,
                      auth=(user_name, password))
     projects = {}
