@@ -16,7 +16,7 @@ def get_jira_data():
 
     r = requests.get(jira_all_issues_for_current_user,
                      auth=(user_name, password))
-    
+
     projects = {}
     for issue in r.json()['issues']:
         issue_key = issue['key']
