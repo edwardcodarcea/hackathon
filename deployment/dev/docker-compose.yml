@@ -15,8 +15,6 @@ services:
     image: nexus.esolutions.ro/peon/ui:latest
     stdin_open: true
     tty: true
-    ports:
-      - 80:80
     labels:
       traefik.frontend.rule: 'Host: peon.dev.esolutions.ro'
       traefik.port: '80'
