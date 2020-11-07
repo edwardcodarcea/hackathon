@@ -15,7 +15,6 @@ export default class Login extends Component<Props, State> {
             method: 'POST',
             body: data,
         }).then(r => r.json()).then(r => that.afterLogin(r));
-
     };
 
     afterLogin = (response : any) => {

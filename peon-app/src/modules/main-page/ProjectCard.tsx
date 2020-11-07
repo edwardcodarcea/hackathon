@@ -1,23 +1,37 @@
-
-import React, {Component} from 'react';
-import {MDBBtn, MDBCard, MDBCardBody, MDBCardHeader, MDBCollapse, MDBContainer} from 'mdbreact';
+import React, {Component, ReactText} from 'react';
+import {
+    MDBBtn,
+    MDBCard,
+    MDBCardBody,
+    MDBCardHeader,
+    MDBCollapse,
+    MDBContainer,
+    MDBIcon,
+    MDBPopper,
+    MDBTooltip
+} from 'mdbreact';
 import {IssueModel} from "./models/IssueModel";
-import {randomBytes} from "crypto";
 import "./ProjectCard.css";
-type Props = {key: string, name:string, issues:IssueModel[]};
-type State = {outCollapseID:string,inCollapseID:string};
+import CopyToClipboard from "react-copy-to-clipboard";
+
+type Props = {textAreaChange: (value:ReactText) => any;key: string, name:string, issues:IssueModel[]};
+type State = {outCollapseID:string};
 
 export default class ProjectCard extends Component<Props, State> {
     state = {
-        outCollapseID: "",
-        inCollapseID: ""
+        outCollapseID: ""
     }
 
-    intoggleCollapse = (inCollapseID: string) => () => {
-        this.setState(prevState => ({
-            inCollapseID: prevState.inCollapseID !== inCollapseID ? inCollapseID : ""
-        }));
+    addToTextArea = (value : string) => () => {
+        let a = document.getElementById("_peon_text_to_copy")
+        if(a) {
+            a.innerHTML = a.innerHTML +"\n"+ value;
+            a.setAttribute("value", a.innerHTML );
+        }
     }
+
+
+
     outtoggleCollapse = (outCollapseID: string) => () => {
         this.setState(prevState => ({
             outCollapseID: prevState.outCollapseID !== outCollapseID ? outCollapseID : ""
@@ -25,25 +39,63 @@ export default class ProjectCard extends Component<Props, State> {
     }
     render() {
         return (
-            <MDBContainer>
+            <MDBContainer className="pt-3">
                 <MDBCard>
                     <MDBCardHeader onClick={this.outtoggleCollapse(this.props.name)}>
                         {this.props.name}
                     </MDBCardHeader>
                     <MDBCardBody>
+                        {this.props.issues.slice(0,3).map((value,index) => {return(
+                            <>
+                                <div  className={"d-flex justify-content-between issue-title-"+index%2}>
+                                    {value.key + " : " + value.summary + " ("+ value.status +")"}
+                                    <MDBIcon far icon="copy"
+                                             onClick={this.props.textAreaChange(value.key + " : " + value.summary + " (" + value.status + ")")}/>
+                                    <MDBPopper tag={"span"} popover
+                                               domElement clickable placement="right">
+                                            <span>
+                                                <CopyToClipboard text={value.key + " : " + value.summary + " ("+ value.status +")"}>
+                                                   <MDBIcon far icon="copy" />
+                                                </CopyToClipboard>
+                                            </span>
+                                        <span>
+                                                {"Text" +
+                                                " copied : " + value.key + " : " + value.summary + " ("+ value.status +")"}
+                                            </span>
+                                    </MDBPopper>
+                                </div>
+                            </>
+                        )
+                        })}
                         <MDBCollapse  id={this.props.name} isOpen={this.state.outCollapseID}>
-                        {this.props.issues.map((value,index) => {
+                        {this.props.issues.slice(3).map((value,index) => {
                             return(
                                 <>
-                                    <div className={"issue-title-"+index%2} onClick={this.intoggleCollapse(value.key)}>{value.key}</div>
-                                    <MDBCollapse key={value.key + " " + value.status + " " + value.summary + index } id={value.key} isOpen={this.state.inCollapseID}>
-                                        <p>
-                                            {value.status + " " + value.summary}
-                                        </p>
-                                    </MDBCollapse>
+                                    <div className={"d-flex justify-content-between issue-title-"+(index+1)%2}>
+                                        {value.key + " : " + value.summary + " ("+ value.status +")"}
+                                        <MDBIcon far icon="copy"
+                                                 onClick={this.props.textAreaChange(value.key + " : " + value.summary + " (" + value.status + ")")}/>
+
+                                        <MDBPopper tag={"span"} popover
+                                                   domElement clickable placement="right">
+                                            <span>
+                                                <CopyToClipboard text={value.key + " : " + value.summary + " ("+ value.status +")"}>
+                                                   <MDBIcon far icon="copy" />
+                                                </CopyToClipboard>
+                                            </span>
+                                            <span>
+                                                {"Text" +
+                                                " copied : " + value.key + " : " + value.summary + " ("+ value.status +")"}
+                                            </span>
+                                        </MDBPopper>
+                                    </div>
                                 </>
                             )
                         })}
+                        </MDBCollapse>
+
+                        <MDBCollapse  id={this.props.name} isOpen={!this.state.outCollapseID}>
+
                         </MDBCollapse>
                     </MDBCardBody>
                 </MDBCard>
