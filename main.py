@@ -8,11 +8,15 @@ CORS(app)
 jira_base = 'https://jira.tarent.de/rest/api/2/'
 jira_all_issues_for_current_user = jira_base + "search?jql=assignee%20=%20currentuser()&fields=project,summary,status&maxResults=1000"
 
-
+last_request = {}
 @app.route("/jira", methods=["POST"])
 def get_jira_data():
     user_name = request.form.get('username')
     password = request.form.get('password')
+    global last_request
+    if last_request != {}:
+        return jsonify(last_request), 200
+
     r = requests.get(jira_all_issues_for_current_user,
                      auth=(user_name, password))
     projects = {}
@@ -28,6 +32,7 @@ def get_jira_data():
                 'issues': []
             }
         projects[project_key]['issues'].append({'key': issue_key, 'summary': issue_summary, 'status': issue_status})
+    last_request = projects
     return jsonify(projects), 200
 
 

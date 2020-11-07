@@ -1,17 +1,20 @@
 import React from 'react';
 import './App.css';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import Login from './modules/login/Login';
+import {MDBNavbar} from "mdbreact";
+import MainPage from "./modules/main-page/MainPage";
 
 const App = () => {
   return (
-        <BrowserRouter>
-			<Switch>
-				<Route exact path="/">
-					<Login/>
-				</Route>
-			</Switch>
-		</BrowserRouter>
+  		<>
+			<BrowserRouter>
+				<Switch>
+					<Route exact path="/">
+						<MainPage key = "1"/>
+					</Route>
+				</Switch>
+			</BrowserRouter>
+		</>
   );
 }
 
