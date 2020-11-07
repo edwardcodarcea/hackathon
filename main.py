@@ -35,4 +35,4 @@ def get_jira_data():
 
 
 if __name__ == '__main__':
-    app.run('localhost', debug=True)
+    app.run('0.0.0.0', debug=True, port=5000)
