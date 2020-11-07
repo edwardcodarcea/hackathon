@@ -30,7 +30,7 @@ export default class MainPage extends Component<Props, State> {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const that = this;
-        fetch('http://localhost:5000/jira', {
+        fetch('https://peon.dev.esolutions.ro/jira', {
             method: 'POST',
             body: data,
         }).then(r => r.json())
