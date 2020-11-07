@@ -8,7 +8,7 @@ services:
     - 5000:5000
     labels:
       traefik.frontend.rule: 'Host: peon.dev.esolutions.ro'
-      traefik.port: '5001'
+      traefik.port: '5000'
       traefik.enable: 'true'
       io.rancher.container.pull_image: always
   ui:
@@ -17,7 +17,7 @@ services:
     tty: true
     labels:
       traefik.frontend.rule: 'Host: peon.dev.esolutions.ro'
-      traefik.port: '8081'
+      traefik.port: '80'
       traefik.enable: 'true'
       traefik.frontend.redirect.entryPoint: https
       io.rancher.container.pull_image: always
